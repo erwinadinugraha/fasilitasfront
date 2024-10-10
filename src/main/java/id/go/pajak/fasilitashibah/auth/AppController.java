@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -18,26 +19,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author TIK
- */
 @Controller
 public class AppController {
 
 
-    @Autowired
-    private AuthController authCheck;
-
     @GetMapping(value = "/")
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("index");
         HttpSession session = request.getSession();
         if (session.getAttribute("auth") != null) {
-            String authCek = authCheck.checkAuth(request);
-            return new ModelAndView(new RedirectView("/", true, false));
+            return new ModelAndView(new RedirectView("/dashboard", true, false));
         } else {
             return new ModelAndView(new RedirectView("/auth/login", true, false));
         }
+    }
+
+    @GetMapping("/dashboard")
+    @ResponseBody
+    public String dashboard() {
+        System.out.println("dashboard");
+        return "ini adalah dashboard";
     }
 
 

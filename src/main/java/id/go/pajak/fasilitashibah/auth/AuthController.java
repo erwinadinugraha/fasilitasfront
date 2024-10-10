@@ -48,6 +48,7 @@ public class AuthController {
 
     @GetMapping(value = "/login")
     public ModelAndView login() {
+        System.out.println("/auth/login");
         return new ModelAndView(new RedirectView(authProperties.getAuthEndpoint() + "?client_id=" + authProperties.getClientId()
                 + "&response_type=code&redirect_uri=" + authProperties.getRedirectUri(), true, false));
 
@@ -56,6 +57,8 @@ public class AuthController {
     @RequestMapping(value = "/cek", method = RequestMethod.GET)
     public ModelAndView cek(@RequestParam(required = false) String code, RedirectAttributes redirectAttributes,
                             HttpSession sessionObj, HttpServletResponse response) throws IOException {
+        System.out.println("/auth/cek");
+
         if (!code.isEmpty()) {
             // tukarkan code dengan access_token
             // bawa access_token untuk akses halaman yang dipagari dengan oauth
@@ -64,7 +67,13 @@ public class AuthController {
                 sessionObj.isNew();
                 sessionObj.setAttribute("auth", user);
                 if (null != user.getAccess_token()) {
-                    return new ModelAndView(new RedirectView("/dashboard", true, false));
+                    try {
+                        authService.loadAuthentication(user.getAccess_token());
+                        System.out.println("authentication: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+                        return new ModelAndView(new RedirectView(authProperties.getApphost(), true, false));
+                    } catch (AuthenticationException | InvalidTokenException e) {
+                        return new ModelAndView(new RedirectView("/auth/login", true, false));
+                    }
                 } else {
                     return new ModelAndView(new RedirectView("/auth/login", true, false));
                 }
@@ -78,6 +87,7 @@ public class AuthController {
 
     @GetMapping(value = "/logout")
     public ModelAndView logout(HttpServletRequest request) {
+        System.out.println("/auth/logout");
         HttpSession session = request.getSession();
         if (session.getAttribute("auth") != null) {
             UserAuth user = (UserAuth) session.getAttribute("auth");

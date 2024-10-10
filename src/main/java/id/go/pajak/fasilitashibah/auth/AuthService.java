@@ -70,7 +70,7 @@ public class AuthService implements ResourceServerTokenServices {
         userAttributes.put("npwp", userData.getNpwp16());
 
         OAuth2User oAuth2User = new DefaultOAuth2User(authentication.getAuthorities(), userAttributes, "username");
-        OAuth2AuthenticationToken auth = new OAuth2AuthenticationToken(oAuth2User, authentication.getAuthorities(), authProperties.getClientId());
+        OAuth2AuthenticationToken auth = new OAuth2AuthenticationToken(oAuth2User, authentication.getAuthorities(), "djponline");
         SecurityContextHolder.getContext().setAuthentication(auth);
         //set security context
 
