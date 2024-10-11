@@ -42,7 +42,7 @@ public class Oauth2SecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+                .logoutUrl("/auth/logout")
                 .logoutSuccessUrl("/auth/login?logout")
                 .permitAll()
                 .and()

@@ -70,6 +70,7 @@ public class AuthController {
                     try {
                         authService.loadAuthentication(user.getAccess_token());
                         System.out.println("authentication: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+                        System.out.println("role : " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
                         return new ModelAndView(new RedirectView(authProperties.getApphost(), true, false));
                     } catch (AuthenticationException | InvalidTokenException e) {
                         return new ModelAndView(new RedirectView("/auth/login", true, false));
@@ -111,9 +112,6 @@ public class AuthController {
             OAuth2Authentication authentication = null;
             try {
                 authentication = authService.loadAuthentication(authModel.getAccess_token());
-
-
-                System.out.println("authentication: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
             } catch (AuthenticationException | InvalidTokenException e) {
                 urlRedirect = "/auth/login";
                 return urlRedirect;
