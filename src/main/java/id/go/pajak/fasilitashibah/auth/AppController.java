@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 public class AppController {
 
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/duar")
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("index");
         HttpSession session = request.getSession();
